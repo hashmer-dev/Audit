@@ -13,7 +13,7 @@ import {
   Crosshair,
 } from 'lucide-react';
 import { Citation, DocumentFile } from '../types/audit';
-import { PakistanLogo } from './PakistanLogo';
+import { PunjabLogo } from './PunjabLogo';
 
 interface DocumentCitationViewerProps {
   document?: DocumentFile;

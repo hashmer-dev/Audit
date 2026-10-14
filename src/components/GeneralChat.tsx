@@ -7,7 +7,7 @@ const MODELS = [
   'nvidia/nemotron-3.5-lightning:free',
   'liquid/lfm-2.5-2.6b:free',
   'cohere/north-mini-code:free',
-  'gemini-1.5-flash'
+  'gemini-3.1-flash'
 ];
 
 export function GeneralChat() {
@@ -36,12 +36,6 @@ export function GeneralChat() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMessage, selectedModel }),
       });
-
-      if (!res.ok) {
-        const errText = await res.text();
-        throw new Error(errText || `Server error: ${res.status}`);
-      }
-
       const data = await res.json();
       if (data.success) {
         setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);

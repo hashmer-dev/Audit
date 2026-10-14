@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import { AuditPara, AuditSession } from '../types/audit';
 import { exportReportToDocx } from '../utils/docxExport';
-import { PakistanLogo } from './PakistanLogo';
+import { PunjabLogo } from './PunjabLogo';
 
 interface CommercialAuditWordProps {
   currentSession: AuditSession | null;
@@ -67,7 +67,7 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
     if (!currentSession) {
       editorRef.current.innerHTML = `
         <div style="text-align: center; padding: 40px; color: #64748B;">
-          <h2 style="font-size: 16pt; color: #0F172A; font-weight: bold;">Government of Pakistan Commercial Audit Suite</h2>
+          <h2 style="font-size: 16pt; color: #0F172A; font-weight: bold;">Government of the Punjab Commercial Audit Suite</h2>
           <p>Please initiate an audit session in the workspace to automatically compile draft paras here.</p>
         </div>
       `;
@@ -117,16 +117,16 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
       });
     }
 
-    const officialEmblemImg = `https://i.ibb.co/BJ7vRPG/download-1.png`;
+    const punjabEmblemImg = `https://i.ibb.co/SX6WhHjs/images.png`;
 
     const initialHtml = `
       <div style="text-align: center; margin-bottom: 24px;">
         <div style="margin-bottom: 12px;">
-          <img src="${officialEmblemImg}" alt="Government of Pakistan" style="width: 72px; height: 72px; margin: 0 auto; display: block; object-fit: contain;" />
+          <img src="${punjabEmblemImg}" alt="Government of the Punjab" style="width: 72px; height: 72px; margin: 0 auto; display: block; object-fit: contain;" />
         </div>
-        <p style="font-size: 13pt; font-weight: bold; color: #065F46; letter-spacing: 1.5px; margin: 0;">GOVERNMENT OF PAKISTAN</p>
-        <h1 style="font-size: 16pt; font-weight: bold; color: #0A192F; margin: 4px 0;">DEPARTMENT OF THE AUDITOR GENERAL OF PAKISTAN</h1>
-        <p style="font-size: 10.5pt; font-style: italic; color: #475569; margin: 0;">COMMERCIAL AUDIT WING &bull; ISLAMABAD / REGIONAL DIRECTORATES</p>
+        <p style="font-size: 13pt; font-weight: bold; color: #065F46; letter-spacing: 1.5px; margin: 0;">GOVERNMENT OF THE PUNJAB</p>
+        <h1 style="font-size: 16pt; font-weight: bold; color: #0A192F; margin: 4px 0;">DIRECTORATE GENERAL COMMERCIAL AUDIT</h1>
+        <p style="font-size: 10.5pt; font-style: italic; color: #475569; margin: 0;">COMMERCIAL AUDIT WING &bull; LAHORE / ISLAMABAD</p>
         <hr style="border: 0; border-top: 2px solid #065F46; margin: 16px 0;" />
         <h2 style="font-size: 14pt; font-weight: bold; color: #0F172A; text-decoration: underline; margin: 10px 0;">
           DRAFT AUDIT REPORT (DAR) FOR THE FINANCIAL YEAR ${currentSession.financialYear}

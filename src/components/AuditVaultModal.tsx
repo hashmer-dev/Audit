@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { AuditSession } from '../types/audit';
 import { exportReportToDocx } from '../utils/docxExport';
-import { PakistanLogo } from './PakistanLogo';
+import { PunjabLogo } from './PunjabLogo';
 
 interface AuditVaultModalProps {
   isOpen: boolean;
