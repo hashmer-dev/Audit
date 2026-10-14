@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Building2 } from 'lucide-react';
 import { AuditSession } from '../types/audit';
-import { PunjabLogo } from './PunjabLogo';
+import { PakistanLogo } from './PakistanLogo';
 
 interface NewSessionModalProps {
   isOpen: boolean;

@@ -8,7 +8,7 @@ import {
   Briefcase,
 } from 'lucide-react';
 import { ActiveView, AuditSession } from '../types/audit';
-import { PunjabLogo } from './PunjabLogo';
+import { PakistanLogo } from './PakistanLogo';
 
 interface HeaderProps {
   currentSession: AuditSession | null;
@@ -40,7 +40,7 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Left: Official Government of Punjab Logo & Session Info */}
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-3">
-          <PunjabLogo size="md" />
+          <PakistanLogo size="md" />
           <div>
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 font-sans">

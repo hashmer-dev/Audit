@@ -7,7 +7,7 @@ const MODELS = [
   'nvidia/nemotron-3.5-lightning:free',
   'liquid/lfm-2.5-2.6b:free',
   'cohere/north-mini-code:free',
-  'gemini-3.1-flash'
+  'gemini-1.5-flash'
 ];
 
 export function GeneralChat() {

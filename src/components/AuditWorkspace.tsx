@@ -18,7 +18,7 @@ import {
 import { AuditPara, AuditSession, Citation, DocumentFile, Rulebook } from '../types/audit';
 import { AuditParaCard } from './AuditParaCard';
 import { DocumentCitationViewer } from './DocumentCitationViewer';
-import { PunjabLogo } from './PunjabLogo';
+import { PakistanLogo } from './PakistanLogo';
 
 interface AuditWorkspaceProps {
   currentSession: AuditSession | null;
@@ -230,7 +230,7 @@ export const AuditWorkspace: React.FC<AuditWorkspaceProps> = ({
       {currentSession ? (
         <div className="bg-white border-b border-slate-200 px-5 py-3 shrink-0 flex flex-wrap items-center justify-between gap-3 shadow-xs">
           <div className="flex items-center gap-3">
-            <PunjabLogo size="md" />
+            <PakistanLogo size="md" />
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-sm font-bold text-slate-900">
@@ -378,7 +378,7 @@ export const AuditWorkspace: React.FC<AuditWorkspaceProps> = ({
             {/* Empty States */}
             {!currentSession ? (
               <div className="p-12 text-center bg-white border border-slate-200 rounded-2xl shadow-xs">
-                <PunjabLogo size="xl" className="mx-auto mb-3" />
+                <PakistanLogo size="xl" className="mx-auto mb-3" />
                 <h3 className="text-base font-bold text-slate-900">No Active Audit Session</h3>
                 <p className="text-xs text-slate-500 max-w-md mx-auto mt-1 mb-5">
                   To start an audit, initiate an official session with the audited entity’s title, financial year, and audit scope.
@@ -393,7 +393,7 @@ export const AuditWorkspace: React.FC<AuditWorkspaceProps> = ({
               </div>
             ) : filteredParas.length === 0 && !analyzing ? (
               <div className="p-12 text-center bg-white border border-slate-200 rounded-2xl shadow-xs">
-                <PunjabLogo size="xl" className="mx-auto mb-3" />
+                <PakistanLogo size="xl" className="mx-auto mb-3" />
                 <h3 className="text-base font-bold text-slate-900">No Draft Audit Paras Formulated Yet</h3>
                 <p className="text-xs text-slate-500 max-w-lg mx-auto mt-1 mb-5 leading-relaxed">
                   Attach your evidence files (financial ledgers, bills, contracts, procurement orders) via the command bar below and enter your audit directive or click one of the regulatory audit action pills.

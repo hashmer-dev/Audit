@@ -11,7 +11,7 @@ import {
   FolderOpen,
 } from 'lucide-react';
 import { ActiveView, AuditSession, DocumentFile } from '../types/audit';
-import { PunjabLogo } from './PunjabLogo';
+import { PakistanLogo } from './PakistanLogo';
 
 interface SidebarProps {
   currentSession: AuditSession | null;
@@ -37,7 +37,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Top Header Branding with Official Punjab Government Logo */}
       <div className="p-4 border-b border-slate-200 bg-white">
         <div className="flex items-center gap-3">
-          <PunjabLogo size="lg" />
+          <PakistanLogo size="lg" />
           <div>
             <div className="flex items-center gap-1.5">
               <span className="font-display font-extrabold text-base tracking-wide text-slate-900">
@@ -204,12 +204,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
-            <span className="text-slate-800 font-bold">Punjab Government Portal</span>
+            <span className="text-slate-800 font-bold">Pakistan Government Portal</span>
           </span>
           <span className="font-mono text-emerald-800 font-bold">COMMERCIAL AUDIT</span>
         </div>
         <p className="text-[9px] text-slate-500 truncate">
-          Government of the Punjab &bull; Finance & Audit Division
+          Government of Pakistan &bull; Finance & Audit Division
         </p>
       </div>
     </aside>
