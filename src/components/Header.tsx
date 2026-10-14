@@ -6,9 +6,9 @@ import {
   Shield,
   Split,
   Briefcase,
-  Scale,
 } from 'lucide-react';
 import { ActiveView, AuditSession } from '../types/audit';
+import { PunjabLogo } from './PunjabLogo';
 
 interface HeaderProps {
   currentSession: AuditSession | null;
@@ -33,18 +33,16 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <header className="no-print bg-white border-b border-slate-200 text-slate-800 px-5 py-2.5 flex flex-wrap items-center justify-between gap-3 shadow-xs sticky top-0 z-40">
-      {/* Left: Official State Seal & Session Info */}
+      {/* Left: Official Government of Punjab Logo & Session Info */}
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-emerald-800 text-white flex items-center justify-center font-display font-bold text-xs tracking-wider shadow-xs border-2 border-emerald-900">
-            AGP
-          </div>
+          <PunjabLogo size="md" />
           <div>
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 font-sans">
-                Department of the Auditor General of Pakistan
+                Government of the Punjab
               </span>
-              <span className="bg-amber-100 text-amber-900 text-[10px] font-mono px-2 py-0.5 rounded border border-amber-300 font-semibold">
+              <span className="bg-amber-100 text-amber-900 text-[10px] font-mono px-2 py-0.5 rounded border border-amber-300 font-bold">
                 COMMERCIAL AUDIT WING
               </span>
             </div>

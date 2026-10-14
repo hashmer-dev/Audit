@@ -6,12 +6,12 @@ import {
   BookOpen,
   Briefcase,
   Paperclip,
-  Scale,
   FileSpreadsheet,
   CheckCircle2,
   FolderOpen,
 } from 'lucide-react';
 import { ActiveView, AuditSession, DocumentFile } from '../types/audit';
+import { PunjabLogo } from './PunjabLogo';
 
 interface SidebarProps {
   currentSession: AuditSession | null;
@@ -36,23 +36,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   return (
     <aside className="no-print w-64 md:w-72 bg-slate-50 border-r border-slate-200 flex flex-col shrink-0 text-slate-700 h-screen select-none">
-      {/* Top Header Branding */}
+      {/* Top Header Branding with Official Punjab Government Logo */}
       <div className="p-4 border-b border-slate-200 bg-white">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-emerald-800 text-white flex items-center justify-center font-bold shadow-xs">
-            <Scale className="w-5 h-5 text-emerald-100" />
-          </div>
+          <PunjabLogo size="lg" />
           <div>
             <div className="flex items-center gap-1.5">
               <span className="font-display font-extrabold text-base tracking-wide text-slate-900">
                 CAP-AI
               </span>
-              <span className="text-[10px] bg-emerald-100 text-emerald-800 font-mono px-1.5 py-0.2 rounded font-semibold border border-emerald-300">
-                FEDERAL
+              <span className="text-[10px] bg-emerald-100 text-emerald-800 font-mono px-1.5 py-0.2 rounded font-bold border border-emerald-300">
+                PUNJAB
               </span>
             </div>
-            <p className="text-[11px] text-slate-600 font-medium leading-tight">
-              Commercial Audit of Pakistan
+            <p className="text-[11px] text-emerald-900 font-bold leading-tight">
+              Government of the Punjab
+            </p>
+            <p className="text-[10px] text-slate-500 font-medium leading-tight">
+              Commercial Audit Directorate
             </p>
           </div>
         </div>
@@ -214,16 +215,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Footer System Notice */}
-      <div className="p-3 border-t border-slate-200 bg-slate-100 text-[10px] text-slate-500 flex flex-col gap-0.5">
+      <div className="p-3 border-t border-slate-200 bg-slate-100 text-[10px] text-slate-600 flex flex-col gap-0.5">
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
-            <span className="text-slate-800 font-bold">Government Server</span>
+            <span className="text-slate-800 font-bold">Punjab Government Portal</span>
           </span>
-          <span className="font-mono text-emerald-800 font-semibold">AGP Official</span>
+          <span className="font-mono text-emerald-800 font-bold">COMMERCIAL AUDIT</span>
         </div>
         <p className="text-[9px] text-slate-500 truncate">
-          Auditor General of Pakistan &bull; Constitution of 1973
+          Government of the Punjab &bull; Finance & Audit Division
         </p>
       </div>
     </aside>

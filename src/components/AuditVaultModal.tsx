@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   X,
-  Database,
   Building2,
   Calendar,
   Download,
@@ -10,6 +9,7 @@ import {
 } from 'lucide-react';
 import { AuditSession } from '../types/audit';
 import { exportReportToDocx } from '../utils/docxExport';
+import { PunjabLogo } from './PunjabLogo';
 
 interface AuditVaultModalProps {
   isOpen: boolean;
@@ -37,27 +37,26 @@ export const AuditVaultModal: React.FC<AuditVaultModalProps> = ({
       executiveSummary: session.executiveSummary,
       totalAmount: session.totalIrregularityAmount,
       paras: session.paras,
+      reportTitle: `GOVERNMENT OF THE PUNJAB - DRAFT AUDIT REPORT (${session.financialYear})`,
     });
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs select-none">
       <div className="bg-white border border-slate-300 rounded-2xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-xl overflow-hidden animate-scaleUp">
-        {/* Modal Header */}
+        {/* Modal Header with Punjab Logo */}
         <div className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-800">
-              <Database className="w-5 h-5 text-amber-700" />
-            </div>
+            <PunjabLogo size="md" />
             <div>
               <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <span>Audit Sessions Vault</span>
-                <span className="text-[10px] bg-slate-100 text-slate-700 font-mono px-2 py-0.5 rounded border border-slate-300 font-semibold">
+                <span className="text-[10px] bg-emerald-50 text-emerald-800 font-mono px-2 py-0.5 rounded border border-emerald-300 font-bold">
                   Official Records
                 </span>
               </h2>
               <p className="text-xs text-slate-500">
-                Department of the Auditor General of Pakistan &bull; Commercial Audit Wing
+                Government of the Punjab &bull; Commercial Audit Directorate Archives
               </p>
             </div>
           </div>
@@ -77,7 +76,7 @@ export const AuditVaultModal: React.FC<AuditVaultModalProps> = ({
               <FolderOpen className="w-10 h-10 text-slate-300 mx-auto mb-2" />
               <h4 className="text-sm font-bold text-slate-700">Vault is Empty</h4>
               <p className="text-xs text-slate-500 mt-1">
-                Completed and active audit sessions will appear in this repository for historical cross-referencing and PAC defense.
+                Completed and active Punjab commercial audit sessions will appear in this repository for historical cross-referencing and PAC defense.
               </p>
             </div>
           ) : (

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { X, PlusCircle, Building2, Calendar, FileText, Scale } from 'lucide-react';
+import { X, Building2 } from 'lucide-react';
 import { AuditSession } from '../types/audit';
+import { PunjabLogo } from './PunjabLogo';
 
 interface NewSessionModalProps {
   isOpen: boolean;
@@ -16,7 +17,7 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
   const [entityName, setEntityName] = useState<string>('');
   const [sessionName, setSessionName] = useState<string>('');
   const [financialYear, setFinancialYear] = useState<string>('2023-24');
-  const [sector, setSector] = useState<string>('Public Sector Enterprise');
+  const [sector, setSector] = useState<string>('Punjab Public Sector Enterprise');
   const [auditScope, setAuditScope] = useState<string>(
     'Commercial Procurement, Propriety, and Financial Regularity Audit'
   );
@@ -50,15 +51,13 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs select-none">
       <div className="bg-white border border-slate-300 rounded-2xl w-full max-w-lg flex flex-col shadow-xl overflow-hidden animate-scaleUp">
-        {/* Header */}
+        {/* Header with Official Punjab Government Logo */}
         <div className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-emerald-800 text-white flex items-center justify-center">
-              <Scale className="w-5 h-5 text-emerald-100" />
-            </div>
+            <PunjabLogo size="md" />
             <div>
               <h2 className="text-sm font-bold text-slate-900">Initiate Commercial Audit Session</h2>
-              <p className="text-xs text-slate-500">Department of the Auditor General of Pakistan</p>
+              <p className="text-xs text-emerald-800 font-semibold">Government of the Punjab &bull; Audit Department</p>
             </div>
           </div>
           <button
@@ -74,14 +73,14 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
           {/* Entity Name */}
           <div>
             <label className="block text-[11px] font-bold text-slate-700 mb-1 uppercase tracking-wider">
-              Entity / Ministry / Department Name *
+              Punjab Entity / Department / Authority Name *
             </label>
             <div className="relative">
               <Building2 className="w-4 h-4 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 required
-                placeholder="e.g. National Transmission & Despatch Company, PSO, CDA..."
+                placeholder="e.g. Lahore Development Authority (LDA), Punjab Thermal Power, WASA..."
                 value={entityName}
                 onChange={(e) => {
                   setEntityName(e.target.value);
@@ -99,7 +98,7 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
             </label>
             <input
               type="text"
-              placeholder="e.g. Procurement & Financial Regularity Audit 2023-24"
+              placeholder="e.g. Annual Commercial Audit & Procurement Inspection"
               value={sessionName}
               onChange={(e) => setSessionName(e.target.value)}
               className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-900 outline-none focus:border-emerald-700 text-xs font-medium"
@@ -129,14 +128,13 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
                 onChange={(e) => setSector(e.target.value)}
                 className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-900 outline-none focus:border-emerald-700 text-xs cursor-pointer font-medium"
               >
-                <option value="Power & Energy">Power & Energy</option>
-                <option value="Oil & Gas">Oil & Gas</option>
-                <option value="Communications & Aviation">Communications & Aviation</option>
-                <option value="Infrastructure & Works">Infrastructure & Works</option>
-                <option value="Autonomous & Statutory Bodies">Autonomous & Statutory Bodies</option>
-                <option value="Revenue & Taxation">Revenue & Taxation</option>
-                <option value="Finance & Banking">Finance & Banking</option>
-                <option value="Defense Production">Defense Production</option>
+                <option value="Punjab Provincial Enterprise">Punjab Provincial Enterprise</option>
+                <option value="Development & Civic Authority">Development & Civic Authority</option>
+                <option value="Energy & Power Companies">Energy & Power Companies</option>
+                <option value="Transport & Infrastructure">Transport & Infrastructure</option>
+                <option value="Healthcare & Specialized Care">Healthcare & Specialized Care</option>
+                <option value="Agriculture & Food Department">Agriculture & Food Department</option>
+                <option value="Irrigation & Water Management">Irrigation & Water Management</option>
               </select>
             </div>
           </div>

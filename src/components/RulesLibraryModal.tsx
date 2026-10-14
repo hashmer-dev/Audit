@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   X,
-  BookOpen,
   Search,
   Scale,
   Copy,
@@ -9,6 +8,7 @@ import {
   Plus,
 } from 'lucide-react';
 import { Rulebook } from '../types/audit';
+import { PunjabLogo } from './PunjabLogo';
 
 interface RulesLibraryModalProps {
   isOpen: boolean;
@@ -65,7 +65,7 @@ export const RulesLibraryModal: React.FC<RulesLibraryModalProps> = ({
       id: `custom-rule-${Date.now()}`,
       title: newTitle,
       shortCode: newTitle.slice(0, 8).toUpperCase(),
-      authority: newAuthority || 'Federal / Provincial Government of Pakistan',
+      authority: newAuthority || 'Government of the Punjab',
       year: '2024',
       clausesCount: 1,
       summary: 'Custom statutory rule / regulatory circular uploaded by auditor.',
@@ -92,12 +92,10 @@ export const RulesLibraryModal: React.FC<RulesLibraryModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs select-none">
       <div className="bg-white border border-slate-300 rounded-2xl w-full max-w-4xl h-[85vh] flex flex-col shadow-xl overflow-hidden animate-scaleUp">
-        {/* Modal Header */}
+        {/* Modal Header with Punjab Logo */}
         <div className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-emerald-800 text-white flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-emerald-100" />
-            </div>
+            <PunjabLogo size="md" />
             <div>
               <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <span>Rules & Regulations Library</span>
@@ -106,7 +104,7 @@ export const RulesLibraryModal: React.FC<RulesLibraryModalProps> = ({
                 </span>
               </h2>
               <p className="text-xs text-slate-500">
-                Official regulatory statutes governing Federal and Provincial Commercial Audits in Pakistan.
+                Government of the Punjab &bull; PPRA & Financial Rules Regulatory Library
               </p>
             </div>
           </div>
@@ -136,7 +134,7 @@ export const RulesLibraryModal: React.FC<RulesLibraryModalProps> = ({
               <span>Register Custom Regulatory Statutory Order (SRO) / Rulebook</span>
             </h3>
             <p className="text-slate-500">
-              Add provincial procurement rules (e.g., Sindh PPRA, Punjab PPRA) or specialized departmental regulations to the AI's cross-referencing engine.
+              Add provincial procurement rules (e.g., Punjab Procurement Rules 2014, Punjab Finance Acts) or specialized departmental regulations to the AI's cross-referencing engine.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -156,7 +154,7 @@ export const RulesLibraryModal: React.FC<RulesLibraryModalProps> = ({
                 <label className="block text-[11px] font-bold text-slate-700 mb-1 uppercase tracking-wider">Enacting Authority</label>
                 <input
                   type="text"
-                  placeholder="e.g. PPRA Punjab / Finance Department"
+                  placeholder="e.g. Punjab PPRA / Finance Department Punjab"
                   value={newAuthority}
                   onChange={(e) => setNewAuthority(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-900 outline-none focus:border-emerald-700 font-medium"
@@ -170,7 +168,7 @@ export const RulesLibraryModal: React.FC<RulesLibraryModalProps> = ({
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Rule 14(1)"
+                  placeholder="e.g. Rule 12(1)"
                   value={newSection}
                   onChange={(e) => setNewSection(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-900 outline-none focus:border-emerald-700 font-medium"
@@ -181,7 +179,7 @@ export const RulesLibraryModal: React.FC<RulesLibraryModalProps> = ({
                 <label className="block text-[11px] font-bold text-slate-700 mb-1 uppercase tracking-wider">Clause Subject / Title</label>
                 <input
                   type="text"
-                  placeholder="e.g. Prohibition on Artificial Splitting"
+                  placeholder="e.g. Prohibition on Splitting of Procurements"
                   value={newSectionTitle}
                   onChange={(e) => setNewSectionTitle(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-900 outline-none focus:border-emerald-700 font-medium"

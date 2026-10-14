@@ -13,6 +13,7 @@ import {
   Crosshair,
 } from 'lucide-react';
 import { Citation, DocumentFile } from '../types/audit';
+import { PunjabLogo } from './PunjabLogo';
 
 interface DocumentCitationViewerProps {
   document?: DocumentFile;
@@ -33,7 +34,6 @@ export const DocumentCitationViewer: React.FC<DocumentCitationViewerProps> = ({
   );
   const [copied, setCopied] = useState<boolean>(false);
 
-  // Sync page if active citation changes
   React.useEffect(() => {
     if (activeCitation?.pageNumber) {
       setCurrentPage(activeCitation.pageNumber);
@@ -43,10 +43,10 @@ export const DocumentCitationViewer: React.FC<DocumentCitationViewerProps> = ({
   if (!document) {
     return (
       <div className="h-full flex flex-col items-center justify-center bg-slate-50 text-slate-500 p-6 text-center border-l border-slate-200">
-        <FileText className="w-12 h-12 text-slate-300 mb-3" />
+        <PunjabLogo size="lg" className="mb-3 opacity-60" />
         <h4 className="text-sm font-bold text-slate-700">No Document Selected</h4>
         <p className="text-xs text-slate-500 max-w-xs mt-1">
-          Click any citation badge inside an Audit Para (e.g. [📍 Ref: Procurement_File.pdf]) or select an uploaded file from the sidebar to inspect page evidence.
+          Click any citation badge inside an Audit Para or select an uploaded file from the sidebar to inspect page evidence.
         </p>
       </div>
     );
@@ -67,7 +67,7 @@ export const DocumentCitationViewer: React.FC<DocumentCitationViewerProps> = ({
     document.extractedText
       ? document.extractedText.split('\n').filter(Boolean)
       : [
-          `GOVERNMENT OF PAKISTAN - COMMERCIAL AUDIT RECORD`,
+          `GOVERNMENT OF THE PUNJAB - COMMERCIAL AUDIT RECORD`,
           `FILE REFERENCE: ${document.name} | AUTHENTICATED AUDIT EVIDENCE`,
           `---------------------------------------------------------------------------------`,
           `RECORD EXTRACT & VERIFICATION SHEET`,
@@ -84,9 +84,7 @@ export const DocumentCitationViewer: React.FC<DocumentCitationViewerProps> = ({
       {/* Top Document Header Bar */}
       <div className="p-3 bg-white border-b border-slate-200 flex items-center justify-between gap-2 shrink-0">
         <div className="flex items-center gap-2 truncate">
-          <div className="w-8 h-8 rounded bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0">
-            <FileText className="w-4 h-4 text-blue-700" />
-          </div>
+          <PunjabLogo size="sm" />
           <div className="truncate">
             <h3 className="text-xs font-bold text-slate-900 truncate" title={document.name}>
               {document.name}
@@ -189,22 +187,26 @@ export const DocumentCitationViewer: React.FC<DocumentCitationViewerProps> = ({
           className="transition-transform duration-150 document-page-sheet w-full max-w-[650px] min-h-[780px] p-8 rounded bg-white text-slate-900 relative shadow-md border border-slate-300"
         >
           {/* Watermark */}
-          <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-4 select-none overflow-hidden">
-            <span className="font-display font-black text-6xl text-slate-900 transform -rotate-45 tracking-widest uppercase">
-              CONFIDENTIAL - AGP
+          <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center opacity-4 select-none overflow-hidden">
+            <PunjabLogo size="xl" className="opacity-60 scale-150 mb-4" />
+            <span className="font-display font-black text-4xl text-slate-900 tracking-widest uppercase">
+              GOVERNMENT OF THE PUNJAB
             </span>
           </div>
 
           {/* Official Letterhead in simulated PDF */}
           <div className="border-b-2 border-slate-900 pb-3 mb-4 text-center">
-            <div className="text-[11px] font-bold tracking-wider text-slate-700 uppercase">
-              Government of Pakistan &bull; Commercial Audit Directorate
+            <div className="flex justify-center mb-1.5">
+              <PunjabLogo size="md" />
+            </div>
+            <div className="text-[11px] font-bold tracking-wider text-emerald-900 uppercase">
+              Government of the Punjab &bull; Commercial Audit Directorate
             </div>
             <h2 className="text-sm font-extrabold uppercase tracking-wide text-slate-900 font-serif">
               {document.name.replace(/\.[^/.]+$/, '').replace(/_/g, ' ')}
             </h2>
             <div className="flex justify-between items-center text-[9px] text-slate-500 font-mono mt-1 pt-1 border-t border-slate-200">
-              <span>DOC REF: AGP/EVIDENCE-VERIFIED</span>
+              <span>DOC REF: PUNJAB-AUDIT/VERIFIED</span>
               <span>AUTHENTICATED AUDIT COPY</span>
               <span>PAGE {currentPage} OF {totalPages}</span>
             </div>
@@ -237,13 +239,13 @@ export const DocumentCitationViewer: React.FC<DocumentCitationViewerProps> = ({
 
             {/* Official Stamp & Signatures */}
             <div className="mt-8 pt-6 border-t border-dashed border-slate-300 flex justify-between items-end">
-              <div className="border-2 border-rose-800 text-rose-800 text-[10px] font-extrabold px-3 py-1 rounded uppercase tracking-wider transform -rotate-3 opacity-90">
-                AUDITED &bull; OBJECTED
+              <div className="border-2 border-emerald-900 text-emerald-900 text-[10px] font-extrabold px-3 py-1 rounded uppercase tracking-wider transform -rotate-3 opacity-90">
+                GOVT OF PUNJAB &bull; AUDITED
               </div>
               <div className="text-right">
                 <div className="w-28 border-b border-slate-700 mb-1"></div>
                 <p className="text-[10px] font-bold text-slate-800">Senior Audit Officer</p>
-                <p className="text-[8px] text-slate-500 font-mono">Commercial Audit Wing</p>
+                <p className="text-[8px] text-slate-500 font-mono">Punjab Commercial Audit Wing</p>
               </div>
             </div>
           </div>
