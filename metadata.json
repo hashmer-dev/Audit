@@ -1,0 +1,6 @@
+{
+  "name": "Commercial Audit of Pakistan AI (CAP-AI)",
+  "description": "Official automated audit analysis workbench and document compilation suite for Senior Government Auditors, Federal & Provincial Commercial Audit Directorates.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
