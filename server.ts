@@ -265,6 +265,39 @@ app.post('/api/audit/editor-ai', async (req: Request, res: Response) => {
   }
 });
 
+// General Chatbot Endpoint
+app.post('/api/chat', async (req: Request, res: Response) => {
+  try {
+    const { message, selectedModel } = req.body;
+    const modelToUse = selectedModel || 'nvidia/nemotron-3.5-lightning:free';
+    const isOpenRouterModel = modelToUse.includes(':free') || modelToUse.includes('/') || modelToUse.includes('cohere') || modelToUse.includes('liquid') || modelToUse.includes('nvidia');
+
+    let responseText = '';
+    
+    if (isOpenRouterModel) {
+      const openRouterKey = process.env.API_KEY || process.env.OPENROUTER_API_KEY || '';
+      if (!openRouterKey) {
+        return res.status(500).json({ success: false, error: 'OpenRouter API Key (API_KEY) is not configured.' });
+      }
+      responseText = await callOpenRouter(modelToUse, message, openRouterKey);
+    } else {
+      const geminiKey = process.env.GEMINI_API_KEY || '';
+      if (!geminiKey) {
+        return res.status(500).json({ success: false, error: 'GEMINI_API_KEY is not configured.' });
+      }
+      const geminiRes = await ai.models.generateContent({
+        model: modelToUse.startsWith('gemini-') ? modelToUse : 'gemini-3.1-flash',
+        contents: message,
+      });
+      responseText = geminiRes.text || '';
+    }
+
+    return res.json({ success: true, response: responseText });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // In development, hook up Vite dev server middleware
 async function startServer() {
   if (process.env.NODE_ENV !== 'production') {

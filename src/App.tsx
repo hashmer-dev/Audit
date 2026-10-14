@@ -11,6 +11,7 @@ import { AuditWorkspace } from './components/AuditWorkspace';
 import { CommercialAuditWord } from './components/CommercialAuditWord';
 import { AuditVaultModal } from './components/AuditVaultModal';
 import { NewSessionModal } from './components/NewSessionModal';
+import { GeneralChat } from './components/GeneralChat';
 import { exportReportToDocx } from './utils/docxExport';
 
 export default function App() {
@@ -180,6 +181,7 @@ export default function App() {
         activeSessionId={currentSession?.id || ''}
         onSelectSession={handleSelectSession}
       />
+      <GeneralChat />
     </div>
   );
 }
