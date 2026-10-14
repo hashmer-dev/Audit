@@ -11,11 +11,9 @@ export const PunjabLogo: React.FC<PunjabLogoProps> = ({
   size = 'md',
   showText = false,
 }) => {
+  // Official logo image URL requested by user
+  const logoUrl = 'https://i.ibb.co/BJ7vRPG/download-1.png';
   const [imageFailed, setImageFailed] = useState<boolean>(false);
-
-  // Official logo image URLs (direct from Wikimedia Commons official Coat of Arms of Punjab, Pakistan)
-  const officialLogoUrl =
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Coat_of_arms_of_Punjab.svg/480px-Coat_of_arms_of_Punjab.svg.png';
 
   const sizeClasses = {
     sm: 'w-7 h-7 min-w-[28px]',
@@ -31,8 +29,8 @@ export const PunjabLogo: React.FC<PunjabLogoProps> = ({
       >
         {!imageFailed ? (
           <img
-            src={officialLogoUrl}
-            alt="Government of the Punjab Official Emblem"
+            src={logoUrl}
+            alt="Government of Pakistan Official Emblem"
             className="w-full h-full object-contain p-0.5"
             onError={() => setImageFailed(true)}
             loading="eager"

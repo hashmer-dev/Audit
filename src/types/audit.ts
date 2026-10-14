@@ -24,6 +24,7 @@ export interface AuditPara {
   statementOfFacts: string;
   ruleViolated: string;
   auditorRecommendation: string;
+  statutoryReferenceUrl?: string;
   citations: Citation[];
   urduTranslation?: string;
   transferredToWord?: boolean;

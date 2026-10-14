@@ -22,7 +22,6 @@ import { PunjabLogo } from './PunjabLogo';
 
 interface AuditWorkspaceProps {
   currentSession: AuditSession | null;
-  rulebooks: Rulebook[];
   onOpenInWord: (para: AuditPara) => void;
   onAppendToWord: (para: AuditPara) => void;
   dualViewOpen: boolean;
@@ -32,11 +31,11 @@ interface AuditWorkspaceProps {
   onUpdateSessionParas: (paras: AuditPara[], totalAmount?: string, summary?: string) => void;
   onAddDocuments: (docs: DocumentFile[]) => void;
   onOpenNewSession: () => void;
+  selectedModel: string;
 }
 
 export const AuditWorkspace: React.FC<AuditWorkspaceProps> = ({
   currentSession,
-  rulebooks,
   onOpenInWord,
   onAppendToWord,
   dualViewOpen,
@@ -46,6 +45,7 @@ export const AuditWorkspace: React.FC<AuditWorkspaceProps> = ({
   onUpdateSessionParas,
   onAddDocuments,
   onOpenNewSession,
+  selectedModel,
 }) => {
   const [query, setQuery] = useState<string>('');
   const [analyzing, setAnalyzing] = useState<boolean>(false);
@@ -122,8 +122,8 @@ export const AuditWorkspace: React.FC<AuditWorkspaceProps> = ({
           financialYear: currentSession.financialYear,
           auditScope: currentSession.auditScope,
           documents: currentSession.documents,
-          rulebooks: rulebooks,
           query: promptToRun,
+          selectedModel,
         }),
       });
 

@@ -32,12 +32,14 @@ interface CommercialAuditWordProps {
   currentSession: AuditSession | null;
   activeParas: AuditPara[];
   onBackToWorkspace?: () => void;
+  selectedModel: string;
 }
 
 export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
   currentSession,
   activeParas,
   onBackToWorkspace,
+  selectedModel,
 }) => {
   const [activeTab, setActiveTab] = useState<'home' | 'insert' | 'ai' | 'file'>('home');
   const [fontFamily, setFontFamily] = useState<string>('Times New Roman');
@@ -115,7 +117,7 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
       });
     }
 
-    const punjabEmblemImg = `https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Coat_of_arms_of_Punjab.svg/480px-Coat_of_arms_of_Punjab.svg.png`;
+    const punjabEmblemImg = `https://i.ibb.co/SX6WhHjs/images.png`;
 
     const initialHtml = `
       <div style="text-align: center; margin-bottom: 24px;">
@@ -242,6 +244,7 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
           action,
           text: textToProcess,
           context: currentSession?.entityName || 'Commercial Audit Punjab',
+          selectedModel,
         }),
       });
       const data = await res.json();

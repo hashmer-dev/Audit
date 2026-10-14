@@ -4,14 +4,11 @@ import {
   AuditPara,
   AuditSession,
   DocumentFile,
-  Rulebook,
 } from './types/audit';
-import { OFFICIAL_RULEBOOKS } from './data/rulebooks';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { AuditWorkspace } from './components/AuditWorkspace';
 import { CommercialAuditWord } from './components/CommercialAuditWord';
-import { RulesLibraryModal } from './components/RulesLibraryModal';
 import { AuditVaultModal } from './components/AuditVaultModal';
 import { NewSessionModal } from './components/NewSessionModal';
 import { exportReportToDocx } from './utils/docxExport';
@@ -19,13 +16,12 @@ import { exportReportToDocx } from './utils/docxExport';
 export default function App() {
   const [sessions, setSessions] = useState<AuditSession[]>([]);
   const [currentSession, setCurrentSession] = useState<AuditSession | null>(null);
-  const [rulebooks, setRulebooks] = useState<Rulebook[]>(OFFICIAL_RULEBOOKS);
   const [activeView, setActiveView] = useState<ActiveView>('workspace');
+  const [selectedModel, setSelectedModel] = useState<string>('nvidia/nemotron-3.5-lightning:free');
 
   // Modals & Drawers
   const [isNewSessionOpen, setIsNewSessionOpen] = useState<boolean>(false);
   const [isVaultOpen, setIsVaultOpen] = useState<boolean>(false);
-  const [isRulesOpen, setIsRulesOpen] = useState<boolean>(false);
   const [dualViewOpen, setDualViewOpen] = useState<boolean>(false);
   const [selectedDoc, setSelectedDoc] = useState<DocumentFile | undefined>(undefined);
 
@@ -113,11 +109,6 @@ export default function App() {
     setActiveView('workspace');
   };
 
-  // Add Custom Rule
-  const handleAddCustomRule = (rule: Rulebook) => {
-    setRulebooks((prev) => [rule, ...prev]);
-  };
-
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-slate-100 font-sans text-slate-800">
       {/* Official Government Left Sidebar */}
@@ -127,7 +118,6 @@ export default function App() {
         setActiveView={setActiveView}
         onOpenNewSession={() => setIsNewSessionOpen(true)}
         onOpenVault={() => setIsVaultOpen(true)}
-        onOpenRules={() => setIsRulesOpen(true)}
         onSelectDocument={(doc) => {
           setSelectedDoc(doc);
           setDualViewOpen(true);
@@ -147,13 +137,15 @@ export default function App() {
           onExportDocx={handleExportDocx}
           onPrintPdf={handlePrintPdf}
           parasCount={currentSession?.paras.length || 0}
+          selectedModel={selectedModel}
+          setSelectedModel={setSelectedModel}
         />
 
         {/* View Switcher: Interactive Audit Workspace vs Commercial Audit Word */}
         {activeView === 'workspace' ? (
           <AuditWorkspace
             currentSession={currentSession}
-            rulebooks={rulebooks}
+            selectedModel={selectedModel}
             onOpenInWord={handleOpenInWord}
             onAppendToWord={handleAppendToWord}
             dualViewOpen={dualViewOpen}
@@ -169,6 +161,7 @@ export default function App() {
             currentSession={currentSession}
             activeParas={currentSession?.paras || []}
             onBackToWorkspace={() => setActiveView('workspace')}
+            selectedModel={selectedModel}
           />
         )}
       </div>
@@ -186,13 +179,6 @@ export default function App() {
         sessions={sessions}
         activeSessionId={currentSession?.id || ''}
         onSelectSession={handleSelectSession}
-      />
-
-      <RulesLibraryModal
-        isOpen={isRulesOpen}
-        onClose={() => setIsRulesOpen(false)}
-        rulebooks={rulebooks}
-        onAddCustomRule={handleAddCustomRule}
       />
     </div>
   );

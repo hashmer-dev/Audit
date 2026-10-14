@@ -45,22 +45,51 @@ CRITICAL AUDIT RULES:
 OUTPUT FORMAT REQUIREMENTS:
 For each detected irregularity, return a structured Audit Para object strictly conforming to the requested schema.
 - DP/PAO Number format: e.g. "DP-2024/COMM-[3 digits]" or "PAO-2024/EXP-[3 digits]"
-- Title: Concise, authoritative statement starting with strong audit verbs ("Unauthorized Payment...", "Irregular Award of Contract...", "Non-Recovery of...", "Loss to Public Exchequor...")
+- Title: Concise, authoritative statement starting with strong audit verbs
 - Amount: PKR formatted string, e.g. "Rs. 14,500,000/-"
 - Amount Numeric: exact integer/float value in PKR
 - Statement of Facts: Clear, objective, timeline-based description of what transpired based on the evidence.
-- Rule Violated: Specific Clause/Rule number, section, and rulebook title (e.g. "Rule 12 & Rule 36(b) of PPRA Rules 2004", "Rule 148 of GFR Vol-I").
-- Auditor Recommendation: Clear directive for recovery, fixation of responsibility, or disciplinary action under E&D rules.
-- Citation Metadata: source_file, page_number, line_number, highlight_snippet, and bounding box coordinates [x, y, width, height] in percentage (0 to 100) for visual overlay.
+- Rule Violated: Specific Clause/Rule number, section, and rulebook title.
+- Auditor Recommendation: Clear directive for recovery, fixation of responsibility, or disciplinary action.
+- Statutory Reference URL: Exact web reference URL from internet search where the rule was retrieved.
 - Risk Level: "Critical", "High", or "Medium".
 
 Tone: Extremely formal, objective, legally sound, and compliant with Federal Government auditing standards in Pakistan.
 `;
 
+// Helper to call OpenRouter API
+async function callOpenRouter(model: string, prompt: string, apiKey: string) {
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'HTTP-Referer': process.env.APP_URL || 'https://aisudio.google.com',
+      'X-Title': 'Government of Pakistan CAP-AI Audit Workbench',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: model,
+      messages: [
+        { role: 'system', content: AUDIT_SYSTEM_PROMPT },
+        { role: 'user', content: prompt }
+      ],
+      response_format: { type: 'json_object' },
+    }),
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`OpenRouter API error (${model}): ${response.status} - ${errText}`);
+  }
+
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content || '{}';
+}
+
 // Audit Para Analysis Endpoint
 app.post('/api/audit/analyze', async (req: Request, res: Response) => {
   try {
-    const { sessionName, entityName, financialYear, auditScope, documents, rulebooks, query } = req.body;
+    const { sessionName, entityName, financialYear, auditScope, documents, query, selectedModel } = req.body;
 
     if (!documents || documents.length === 0) {
       return res.status(400).json({
@@ -69,112 +98,111 @@ app.post('/api/audit/analyze', async (req: Request, res: Response) => {
       });
     }
 
-    if (!process.env.GEMINI_API_KEY) {
-      return res.status(500).json({
-        success: false,
-        error: 'GEMINI_API_KEY is not configured on the server. Please attach your API key in the Settings > Secrets panel.',
-      });
-    }
+    const modelToUse = selectedModel || 'nvidia/nemotron-3.5-lightning:free';
+    const isOpenRouterModel = modelToUse.includes(':free') || modelToUse.includes('/') || modelToUse.includes('cohere') || modelToUse.includes('liquid') || modelToUse.includes('nvidia');
 
     const evidenceSummary = (documents || [])
       .map((d: any, idx: number) => `--- DOCUMENT ${idx + 1}: ${d.name} (${d.type || 'file'}) ---\n${d.content || d.extractedText || 'No text content available.'}`)
-      .join('\n\n');
-
-    const rulesSummary = (rulebooks || [])
-      .map((r: any, idx: number) => `--- RULEBOOK ${idx + 1}: ${r.title} ---\n${r.summary || r.content || ''}`)
       .join('\n\n');
 
     const userPrompt = `
 Entity / Department Name: ${entityName || 'Public Sector Enterprise'}
 Financial Year: ${financialYear || '2023-24'}
 Audit Scope: ${auditScope || 'Commercial Compliance & Procurement Regularity Audit'}
-Specific Auditor Directive / Command: ${query || 'Perform comprehensive compliance and financial regularity audit. Identify all statutory violations, unauthorized expenditures, and tax non-compliance.'}
-
-RULES & REGULATIONS REFERENCE:
-${rulesSummary}
+Specific Auditor Directive / Command: ${query || 'Perform comprehensive compliance and financial regularity audit. Search the web for exact statutory rule references, sections, and authoritative citations (e.g. PPRA Rules, GFR, Income Tax Ordinance).'}
 
 EVIDENCE DOCUMENTS TO AUDIT:
 ${evidenceSummary}
 
-Analyze the uploaded evidence documents against the statutory regulations. Generate structured Draft Audit Paras (DP / PAO) with exact citations, monetary figures, and specific regulatory breach details.
+Cross-reference these transactions against verified statutory regulations. Provide exact statutory rule references along with web reference URLs and citations. Return strict JSON matching the schema with executiveSummary, totalIrregularityAmount, and auditParas array.
 `;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
-      contents: userPrompt,
-      config: {
-        systemInstruction: AUDIT_SYSTEM_PROMPT,
-        responseMimeType: 'application/json',
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            executiveSummary: {
-              type: Type.STRING,
-              description: 'Executive summary of audit findings, total financial impact, and systemic irregularities.',
-            },
-            totalIrregularityAmount: {
-              type: Type.STRING,
-              description: 'Total cumulative amount of detected irregularities formatted as Rs. X,XXX,XXX/-',
-            },
-            auditParas: {
-              type: Type.ARRAY,
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  id: { type: Type.STRING },
-                  paoNumber: { type: Type.STRING, description: 'e.g. DP-2024/COMM-01' },
-                  title: { type: Type.STRING },
-                  entityName: { type: Type.STRING },
-                  financialYear: { type: Type.STRING },
-                  category: { type: Type.STRING, description: 'PPRA Violation | Tax Non-Deduction | Unauthorized Expense | Splitting of Purchases | Fake Vouchers' },
-                  riskLevel: { type: Type.STRING, description: 'Critical | High | Medium' },
-                  amountFormatted: { type: Type.STRING, description: 'Rs. 14,500,000/-' },
-                  amountNumeric: { type: Type.NUMBER },
-                  statementOfFacts: { type: Type.STRING },
-                  ruleViolated: { type: Type.STRING },
-                  auditorRecommendation: { type: Type.STRING },
-                  citations: {
-                    type: Type.ARRAY,
-                    items: {
-                      type: Type.OBJECT,
-                      properties: {
-                        sourceFile: { type: Type.STRING },
-                        pageNumber: { type: Type.INTEGER },
-                        lineNumber: { type: Type.INTEGER },
-                        highlightSnippet: { type: Type.STRING },
-                        bbox: {
-                          type: Type.OBJECT,
-                          properties: {
-                            x: { type: Type.NUMBER },
-                            y: { type: Type.NUMBER },
-                            w: { type: Type.NUMBER },
-                            h: { type: Type.NUMBER },
+    let responseText = '';
+
+    if (isOpenRouterModel) {
+      const openRouterKey = process.env.API_KEY || process.env.OPENROUTER_API_KEY || '';
+      if (!openRouterKey) {
+        return res.status(500).json({
+          success: false,
+          error: 'OpenRouter API Key (API_KEY) is not configured in environment variables.',
+        });
+      }
+      responseText = await callOpenRouter(modelToUse, userPrompt, openRouterKey);
+    } else {
+      // Gemini Model (e.g. gemini-3.1-flash, gemini-3.8-flash)
+      const geminiKey = process.env.GEMINI_API_KEY || '';
+      if (!geminiKey) {
+        return res.status(500).json({
+          success: false,
+          error: 'GEMINI_API_KEY is not configured in environment variables.',
+        });
+      }
+
+      const geminiRes = await ai.models.generateContent({
+        model: modelToUse.startsWith('gemini-') ? modelToUse : 'gemini-3.1-flash',
+        contents: userPrompt,
+        config: {
+          systemInstruction: AUDIT_SYSTEM_PROMPT,
+          tools: [{ googleSearch: {} }],
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              executiveSummary: { type: Type.STRING },
+              totalIrregularityAmount: { type: Type.STRING },
+              auditParas: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    id: { type: Type.STRING },
+                    paoNumber: { type: Type.STRING },
+                    title: { type: Type.STRING },
+                    entityName: { type: Type.STRING },
+                    financialYear: { type: Type.STRING },
+                    category: { type: Type.STRING },
+                    riskLevel: { type: Type.STRING },
+                    amountFormatted: { type: Type.STRING },
+                    amountNumeric: { type: Type.NUMBER },
+                    statementOfFacts: { type: Type.STRING },
+                    ruleViolated: { type: Type.STRING },
+                    auditorRecommendation: { type: Type.STRING },
+                    statutoryReferenceUrl: { type: Type.STRING },
+                    citations: {
+                      type: Type.ARRAY,
+                      items: {
+                        type: Type.OBJECT,
+                        properties: {
+                          sourceFile: { type: Type.STRING },
+                          pageNumber: { type: Type.INTEGER },
+                          lineNumber: { type: Type.INTEGER },
+                          highlightSnippet: { type: Type.STRING },
+                          bbox: {
+                            type: Type.OBJECT,
+                            properties: {
+                              x: { type: Type.NUMBER },
+                              y: { type: Type.NUMBER },
+                              w: { type: Type.NUMBER },
+                              h: { type: Type.NUMBER },
+                            },
                           },
                         },
                       },
                     },
                   },
+                  required: ['paoNumber', 'title', 'entityName', 'financialYear', 'amountFormatted', 'statementOfFacts', 'ruleViolated', 'auditorRecommendation', 'citations'],
                 },
-                required: [
-                  'paoNumber',
-                  'title',
-                  'entityName',
-                  'financialYear',
-                  'amountFormatted',
-                  'statementOfFacts',
-                  'ruleViolated',
-                  'auditorRecommendation',
-                  'citations',
-                ],
               },
             },
+            required: ['executiveSummary', 'totalIrregularityAmount', 'auditParas'],
           },
-          required: ['executiveSummary', 'totalIrregularityAmount', 'auditParas'],
         },
-      },
-    });
+      });
 
-    const parsedData = JSON.parse(response.text || '{}');
+      responseText = geminiRes.text || '{}';
+    }
+
+    const parsedData = JSON.parse(responseText);
     return res.json({ success: true, data: parsedData });
   } catch (error: any) {
     console.error('Error during audit analysis:', error);
@@ -188,14 +216,9 @@ Analyze the uploaded evidence documents against the statutory regulations. Gener
 // In-Editor AI Assistant Endpoint
 app.post('/api/audit/editor-ai', async (req: Request, res: Response) => {
   try {
-    const { action, text, context } = req.body;
-
-    if (!process.env.GEMINI_API_KEY) {
-      return res.status(500).json({
-        success: false,
-        error: 'GEMINI_API_KEY is not configured on the server.',
-      });
-    }
+    const { action, text, context, selectedModel } = req.body;
+    const modelToUse = selectedModel || 'nvidia/nemotron-3.5-lightning:free';
+    const isOpenRouterModel = modelToUse.includes(':free') || modelToUse.includes('/') || modelToUse.includes('cohere') || modelToUse.includes('liquid') || modelToUse.includes('nvidia');
 
     let systemPrompt = 'You are an expert Government Audit Officer drafting the final Audit Report for the Public Accounts Committee (PAC) of Pakistan.';
     let prompt = '';
@@ -204,23 +227,39 @@ app.post('/api/audit/editor-ai', async (req: Request, res: Response) => {
       prompt = `Rewrite the following text into the formal, stringent, legally defensible tone prescribed by the Auditor General of Pakistan (AGP):\n\n"${text}"`;
     } else if (action === 'convert_urdu') {
       prompt = `Translate the following audit observation into formal Official Government Urdu (دفتر آڈیٹر جنرل آف پاکستان کی سرکاری اردو زبان) maintaining all financial numbers, references, and rule sections:\n\n"${text}"`;
-    } else if (action === 'summarize_amounts') {
-      prompt = `Extract all monetary values from the following text and provide a concise tabulated statement of financial recovery and recovery directives in PKR:\n\n"${text}"`;
     } else if (action === 'compliance_check') {
-      prompt = `Audit check the following para against PPRA Rules 2004 and GFR Vol-I. Point out any weak arguments or missing citations:\n\n"${text}"`;
+      prompt = `Audit check the following para against PPRA Rules and GFR. Point out any weak arguments or missing citations:\n\n"${text}"`;
     } else {
       prompt = `Enhance the following audit text: "${text}" with context: ${context || 'Audit observation'}`;
     }
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
-      contents: prompt,
-      config: {
-        systemInstruction: systemPrompt,
-      },
-    });
+    let resultText = '';
+    if (isOpenRouterModel) {
+      const openRouterKey = process.env.API_KEY || process.env.OPENROUTER_API_KEY || '';
+      if (!openRouterKey) {
+        return res.status(500).json({ success: false, error: 'OpenRouter API Key (API_KEY) is not configured.' });
+      }
+      const raw = await callOpenRouter(modelToUse, prompt, openRouterKey);
+      try {
+        const parsed = JSON.parse(raw);
+        resultText = parsed.result || parsed.response || parsed.content || raw;
+      } catch {
+        resultText = raw;
+      }
+    } else {
+      const geminiKey = process.env.GEMINI_API_KEY || '';
+      if (!geminiKey) {
+        return res.status(500).json({ success: false, error: 'GEMINI_API_KEY is not configured.' });
+      }
+      const geminiRes = await ai.models.generateContent({
+        model: modelToUse.startsWith('gemini-') ? modelToUse : 'gemini-3.1-flash',
+        contents: prompt,
+        config: { systemInstruction: systemPrompt },
+      });
+      resultText = geminiRes.text || '';
+    }
 
-    return res.json({ success: true, result: response.text });
+    return res.json({ success: true, result: resultText });
   } catch (err: any) {
     return res.status(500).json({ success: false, error: err.message });
   }
@@ -235,7 +274,6 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    // In production, serve dist static files
     app.use(express.static(path.resolve(__dirname, 'dist')));
     app.get('*', (_req, res) => {
       res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
@@ -243,7 +281,7 @@ async function startServer() {
   }
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Commercial Audit of Pakistan AI (CAP-AI) server running on http://0.0.0.0:${PORT}`);
+    console.log(`Government of Pakistan CAP-AI server running on http://0.0.0.0:${PORT}`);
   });
 }
 

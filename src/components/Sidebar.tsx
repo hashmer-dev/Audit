@@ -19,7 +19,6 @@ interface SidebarProps {
   setActiveView: (view: ActiveView) => void;
   onOpenNewSession: () => void;
   onOpenVault: () => void;
-  onOpenRules: () => void;
   onSelectDocument: (doc: DocumentFile) => void;
   selectedDocId?: string;
 }
@@ -30,7 +29,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   setActiveView,
   onOpenNewSession,
   onOpenVault,
-  onOpenRules,
   onSelectDocument,
   selectedDocId,
 }) => {
@@ -46,11 +44,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 CAP-AI
               </span>
               <span className="text-[10px] bg-emerald-100 text-emerald-800 font-mono px-1.5 py-0.2 rounded font-bold border border-emerald-300">
-                PUNJAB
+                PAKISTAN
               </span>
             </div>
             <p className="text-[11px] text-emerald-900 font-bold leading-tight">
-              Government of the Punjab
+              Government of Pakistan
             </p>
             <p className="text-[10px] text-slate-500 font-medium leading-tight">
               Commercial Audit Directorate
@@ -115,19 +113,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <span>Audit Sessions Vault</span>
           </div>
           <span className="text-[10px] text-slate-500 font-mono">Records</span>
-        </button>
-
-        <button
-          onClick={onOpenRules}
-          className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition cursor-pointer"
-        >
-          <div className="flex items-center gap-2.5">
-            <BookOpen className="w-4 h-4 text-purple-700" />
-            <span>Rules & Regulations</span>
-          </div>
-          <span className="text-[10px] text-purple-800 font-mono bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200 font-semibold">
-            PPRA / GFR
-          </span>
         </button>
       </div>
 
