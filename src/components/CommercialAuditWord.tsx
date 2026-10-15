@@ -67,7 +67,7 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
     if (!currentSession) {
       editorRef.current.innerHTML = `
         <div style="text-align: center; padding: 40px; color: #64748B;">
-          <h2 style="font-size: 16pt; color: #0F172A; font-weight: bold;">Government of the Punjab Commercial Audit Suite</h2>
+          <h2 style="font-size: 16pt; color: #0F172A; font-weight: bold;">Government of Pakistan Commercial Audit Suite</h2>
           <p>Please initiate an audit session in the workspace to automatically compile draft paras here.</p>
         </div>
       `;
@@ -117,14 +117,14 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
       });
     }
 
-    const punjabEmblemImg = `https://i.ibb.co/SX6WhHjs/images.png`;
+    const officialEmblemImg = `https://i.ibb.co/BJ7vRPG/download-1.png`;
 
     const initialHtml = `
       <div style="text-align: center; margin-bottom: 24px;">
         <div style="margin-bottom: 12px;">
-          <img src="${punjabEmblemImg}" alt="Government of the Punjab" style="width: 72px; height: 72px; margin: 0 auto; display: block; object-fit: contain;" />
+          <img src="${officialEmblemImg}" alt="Government of Pakistan" style="width: 72px; height: 72px; margin: 0 auto; display: block; object-fit: contain;" />
         </div>
-        <p style="font-size: 13pt; font-weight: bold; color: #065F46; letter-spacing: 1.5px; margin: 0;">GOVERNMENT OF THE PUNJAB</p>
+        <p style="font-size: 13pt; font-weight: bold; color: #065F46; letter-spacing: 1.5px; margin: 0;">GOVERNMENT OF PAKISTAN</p>
         <h1 style="font-size: 16pt; font-weight: bold; color: #0A192F; margin: 4px 0;">DIRECTORATE GENERAL COMMERCIAL AUDIT</h1>
         <p style="font-size: 10.5pt; font-style: italic; color: #475569; margin: 0;">COMMERCIAL AUDIT WING &bull; LAHORE / ISLAMABAD</p>
         <hr style="border: 0; border-top: 2px solid #065F46; margin: 16px 0;" />
@@ -165,7 +165,7 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
           1. EXECUTIVE SUMMARY & SYSTEMIC DEFICIENCIES
         </h3>
         <p style="text-align: justify; line-height: 1.5; font-size: 11.5pt;">
-          ${currentSession.executiveSummary || 'Audit of the financial statements and procurement records was conducted in accordance with Punjab Procurement Rules (PPRA), General Financial Rules (GFR), and statutory auditing standards of Pakistan. Observations requiring Departmental Audit Committee (DAC) scrutiny are formulated hereunder.'}
+          ${currentSession.executiveSummary || 'Audit of the financial statements and procurement records was conducted in accordance with Federal Public Procurement Rules (PPRA 2004), General Financial Rules (GFR), and statutory auditing standards of Pakistan. Observations requiring Departmental Audit Committee (DAC) scrutiny are formulated hereunder.'}
         </p>
       </div>
 
@@ -234,7 +234,7 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
     }
 
     setAiLoading(true);
-    setAiNotification('Processing request using official Punjab Audit standards...');
+    setAiNotification('Processing request using official Pakistan Audit standards...');
 
     try {
       const res = await fetch('/api/audit/editor-ai', {
@@ -243,12 +243,26 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
         body: JSON.stringify({
           action,
           text: textToProcess,
-          context: currentSession?.entityName || 'Commercial Audit Punjab',
+          context: currentSession?.entityName || 'Commercial Audit of Pakistan',
           selectedModel,
         }),
       });
-      const data = await res.json();
-      if (data.success && data.result) {
+
+      let data: any = null;
+      const rawText = await res.text();
+      try {
+        data = JSON.parse(rawText);
+      } catch {
+        if (!res.ok) {
+          throw new Error(
+            res.status === 504 || rawText.includes('FUNCTION_INVOCATION_FAILED')
+              ? 'Request timed out on Vercel. OpenRouter free queue is busy; please try again or select Gemini.'
+              : `Server error (${res.status}): ${rawText.slice(0, 150)}`
+          );
+        }
+      }
+
+      if (data && data.success && data.result) {
         if (selection && selection.rangeCount > 0 && selection.toString().length > 0) {
           const range = selection.getRangeAt(0);
           range.deleteContents();
@@ -263,12 +277,12 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
         setAiNotification('Text successfully updated!');
         setTimeout(() => setAiNotification(null), 3000);
       } else {
-        alert(data.error || 'Failed to process AI request.');
+        alert(data?.error || 'Failed to process AI request.');
       }
     } catch (e: any) {
       console.error(e);
-      setAiNotification('Error processing AI request.');
-      setTimeout(() => setAiNotification(null), 3000);
+      setAiNotification(`Error: ${e.message || 'Error processing AI request.'}`);
+      setTimeout(() => setAiNotification(null), 4000);
     } finally {
       setAiLoading(false);
     }
@@ -283,7 +297,7 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
       executiveSummary: currentSession.executiveSummary,
       totalAmount: currentSession.totalIrregularityAmount,
       paras: activeParas,
-      reportTitle: `GOVERNMENT OF THE PUNJAB - DRAFT AUDIT REPORT (${currentSession.financialYear})`,
+      reportTitle: `GOVERNMENT OF PAKISTAN - DRAFT AUDIT REPORT (${currentSession.financialYear})`,
     });
   };
 
@@ -300,7 +314,7 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
           <div className="flex items-center gap-2">
             <PunjabLogo size="sm" />
             <span className="text-xs font-bold text-emerald-950 mr-3 flex items-center gap-1">
-              <span>Punjab Commercial Audit Word</span>
+              <span>Pakistan Commercial Audit Word</span>
             </span>
 
             <button
@@ -524,7 +538,7 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
                 className="flex items-center gap-1.5 bg-emerald-800 hover:bg-emerald-700 text-white font-medium px-3 py-1 rounded transition cursor-pointer"
               >
                 <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                <span>Rephrase in Official Punjab Audit Tone</span>
+                <span>Rephrase in Official Pakistan Audit Tone</span>
               </button>
 
               <button
@@ -542,7 +556,7 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
                 className="flex items-center gap-1.5 bg-blue-800 hover:bg-blue-700 text-white font-medium px-3 py-1 rounded transition cursor-pointer"
               >
                 <FileCheck className="w-3.5 h-3.5" />
-                <span>Check Punjab PPRA / GFR Compliance</span>
+                <span>Check Federal PPRA / GFR Compliance</span>
               </button>
             </>
           )}
@@ -599,7 +613,7 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
                 onChange={(e) => setShowWatermark(e.target.checked)}
                 className="rounded border-slate-300 text-emerald-700 focus:ring-0"
               />
-              <span>Punjab Seal Watermark</span>
+              <span>State Watermark</span>
             </label>
           </div>
         </div>
@@ -624,20 +638,20 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
           {/* Header Tag */}
           <div className="flex justify-between items-center text-[10px] text-slate-500 font-mono border-b border-slate-300 pb-2 mb-8 uppercase tracking-widest font-semibold">
             <span className="text-amber-800 font-bold">{classification}</span>
-            <span>Government of the Punjab &bull; Commercial Audit Directorate</span>
+            <span>Government of Pakistan &bull; Commercial Audit Directorate</span>
             <span>Page 1 of 2</span>
           </div>
 
-          {/* Watermark Overlay with Punjab Coat of Arms */}
+          {/* Watermark Overlay with State Coat of Arms */}
           {showWatermark && (
             <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center opacity-4 select-none overflow-hidden z-0">
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Coat_of_arms_of_Punjab.svg/480px-Coat_of_arms_of_Punjab.svg.png"
-                alt="Government of Punjab Seal"
+                src="https://i.ibb.co/BJ7vRPG/download-1.png"
+                alt="Government of Pakistan Seal"
                 className="w-80 h-80 object-contain grayscale opacity-60 mb-4"
               />
               <div className="font-display font-black text-5xl text-slate-900 tracking-widest uppercase text-center leading-tight">
-                GOVERNMENT OF THE PUNJAB
+                GOVERNMENT OF PAKISTAN
               </div>
             </div>
           )}
@@ -715,11 +729,11 @@ export const CommercialAuditWord: React.FC<CommercialAuditWordProps> = ({
           <div className="mt-16 pt-6 border-t border-slate-300 flex justify-between items-end text-[10px] text-slate-600 font-mono">
             <div>
               <p className="font-bold text-slate-900">DIRECTOR GENERAL COMMERCIAL AUDIT</p>
-              <p>Government of the Punjab &bull; Lahore</p>
+              <p>Government of Pakistan &bull; Islamabad / Lahore</p>
             </div>
             <div className="text-right">
               <p className="font-bold text-slate-900">COMMERCIAL AUDIT WING</p>
-              <p>Government of the Punjab</p>
+              <p>Government of Pakistan</p>
             </div>
           </div>
         </div>

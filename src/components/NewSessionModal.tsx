@@ -128,7 +128,7 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
                 onChange={(e) => setSector(e.target.value)}
                 className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-900 outline-none focus:border-emerald-700 text-xs cursor-pointer font-medium"
               >
-                <option value="Punjab Provincial Enterprise">Punjab Provincial Enterprise</option>
+                <option value="Federal / Provincial Public Enterprise">Federal / Provincial Public Enterprise</option>
                 <option value="Development & Civic Authority">Development & Civic Authority</option>
                 <option value="Energy & Power Companies">Energy & Power Companies</option>
                 <option value="Transport & Infrastructure">Transport & Infrastructure</option>

@@ -109,7 +109,7 @@ export const PunjabLogo: React.FC<PunjabLogoProps> = ({
               fontWeight="bold"
               fontFamily="sans-serif"
             >
-              حکومت پنجاب
+              حکومت پاکستان
             </text>
           </svg>
         )}
@@ -118,7 +118,7 @@ export const PunjabLogo: React.FC<PunjabLogoProps> = ({
       {showText && (
         <div className="flex flex-col">
           <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-900 leading-tight">
-            Government of the Punjab
+            Government of Pakistan
           </span>
           <span className="text-[10px] text-slate-500 font-medium">
             Commercial Audit Department

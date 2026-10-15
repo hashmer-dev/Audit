@@ -204,12 +204,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
-            <span className="text-slate-800 font-bold">Punjab Government Portal</span>
+            <span className="text-slate-800 font-bold">Pakistan Government Portal</span>
           </span>
           <span className="font-mono text-emerald-800 font-bold">COMMERCIAL AUDIT</span>
         </div>
         <p className="text-[9px] text-slate-500 truncate">
-          Government of the Punjab &bull; Finance & Audit Division
+          Government of Pakistan &bull; Finance & Commercial Audit Directorate
         </p>
       </div>
     </aside>

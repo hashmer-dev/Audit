@@ -56,7 +56,7 @@ export const AuditVaultModal: React.FC<AuditVaultModalProps> = ({
                 </span>
               </h2>
               <p className="text-xs text-slate-500">
-                Government of the Punjab &bull; Commercial Audit Directorate Archives
+                Government of Pakistan &bull; Commercial Audit Directorate Archives
               </p>
             </div>
           </div>
@@ -76,7 +76,7 @@ export const AuditVaultModal: React.FC<AuditVaultModalProps> = ({
               <FolderOpen className="w-10 h-10 text-slate-300 mx-auto mb-2" />
               <h4 className="text-sm font-bold text-slate-700">Vault is Empty</h4>
               <p className="text-xs text-slate-500 mt-1">
-                Completed and active Punjab commercial audit sessions will appear in this repository for historical cross-referencing and PAC defense.
+                Completed and active Pakistan commercial audit sessions will appear in this repository for historical cross-referencing and PAC defense.
               </p>
             </div>
           ) : (

@@ -36,14 +36,28 @@ export function GeneralChat() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMessage, selectedModel }),
       });
-      const data = await res.json();
-      if (data.success) {
+
+      let data: any = null;
+      const rawText = await res.text();
+      try {
+        data = JSON.parse(rawText);
+      } catch {
+        if (!res.ok) {
+          throw new Error(
+            res.status === 504 || rawText.includes('FUNCTION_INVOCATION_FAILED')
+              ? 'The OpenRouter free model timed out or is congested. Please try again or switch model to Gemini (Gemini 3.1 Flash).'
+              : `Server error (${res.status}): ${rawText.slice(0, 150)}`
+          );
+        }
+      }
+
+      if (data && data.success) {
         setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
       } else {
-        throw new Error(data.error);
+        throw new Error(data?.error || 'Failed to generate response.');
       }
     } catch (err: any) {
-      setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${err.message}` }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: `**Error:** ${err.message}` }]);
     } finally {
       setLoading(false);
     }

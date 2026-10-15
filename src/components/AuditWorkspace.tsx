@@ -127,8 +127,21 @@ export const AuditWorkspace: React.FC<AuditWorkspaceProps> = ({
         }),
       });
 
-      const json = await res.json();
-      if (json.success && json.data?.auditParas) {
+      let json: any = null;
+      const rawText = await res.text();
+      try {
+        json = JSON.parse(rawText);
+      } catch {
+        if (!res.ok) {
+          throw new Error(
+            res.status === 504 || rawText.includes('FUNCTION_INVOCATION_FAILED')
+              ? 'Analysis timed out on Vercel. The OpenRouter free tier may be congested. Try switching model to Gemini 3.1 Flash or uploading fewer documents per batch.'
+              : `Server error (${res.status}): ${rawText.slice(0, 150)}`
+          );
+        }
+      }
+
+      if (json && json.success && json.data?.auditParas) {
         onUpdateSessionParas(
           json.data.auditParas,
           json.data.totalIrregularityAmount,
@@ -136,7 +149,7 @@ export const AuditWorkspace: React.FC<AuditWorkspaceProps> = ({
         );
         setQuery('');
       } else {
-        setErrorMessage(json.error || 'Failed to complete audit analysis.');
+        setErrorMessage(json?.error || 'Failed to complete audit analysis.');
       }
     } catch (err: any) {
       console.error('Audit analysis failed:', err);

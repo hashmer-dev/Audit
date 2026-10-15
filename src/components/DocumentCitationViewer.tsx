@@ -200,13 +200,13 @@ export const DocumentCitationViewer: React.FC<DocumentCitationViewerProps> = ({
               <PunjabLogo size="md" />
             </div>
             <div className="text-[11px] font-bold tracking-wider text-emerald-900 uppercase">
-              Government of the Punjab &bull; Commercial Audit Directorate
+              Government of Pakistan &bull; Commercial Audit Directorate
             </div>
             <h2 className="text-sm font-extrabold uppercase tracking-wide text-slate-900 font-serif">
               {document.name.replace(/\.[^/.]+$/, '').replace(/_/g, ' ')}
             </h2>
             <div className="flex justify-between items-center text-[9px] text-slate-500 font-mono mt-1 pt-1 border-t border-slate-200">
-              <span>DOC REF: PUNJAB-AUDIT/VERIFIED</span>
+              <span>DOC REF: PAK-AUDIT/VERIFIED</span>
               <span>AUTHENTICATED AUDIT COPY</span>
               <span>PAGE {currentPage} OF {totalPages}</span>
             </div>
@@ -240,12 +240,12 @@ export const DocumentCitationViewer: React.FC<DocumentCitationViewerProps> = ({
             {/* Official Stamp & Signatures */}
             <div className="mt-8 pt-6 border-t border-dashed border-slate-300 flex justify-between items-end">
               <div className="border-2 border-emerald-900 text-emerald-900 text-[10px] font-extrabold px-3 py-1 rounded uppercase tracking-wider transform -rotate-3 opacity-90">
-                GOVT OF PUNJAB &bull; AUDITED
+                GOVT OF PAKISTAN &bull; AUDITED
               </div>
               <div className="text-right">
                 <div className="w-28 border-b border-slate-700 mb-1"></div>
                 <p className="text-[10px] font-bold text-slate-800">Senior Audit Officer</p>
-                <p className="text-[8px] text-slate-500 font-mono">Punjab Commercial Audit Wing</p>
+                <p className="text-[8px] text-slate-500 font-mono">Federal Commercial Audit Wing</p>
               </div>
             </div>
           </div>
